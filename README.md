@@ -32,7 +32,7 @@ This repository contains a clean, modular implementation of **DETR (DEtection TR
 ## Roadmap
 
 - [x] Basic Project Structure
-- [ ] CNN Backbone (ResNet-50)
+- [x] CNN Backbone (ResNet-50)
 - [ ] Transformer Encoder/Decoder
 - [ ] Hungarian Matcher
 - [ ] Training Pipeline
