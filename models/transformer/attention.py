@@ -4,8 +4,6 @@ import math
 
 class MultiHeadAttention(nn.Module):
     """
-    WORKBOOK: Multi-Head Attention
-    
     This module is responsible for the 'Self-Attention' mechanism. 
     In DETR, this allows object queries to 'talk' to each other and to the image features.
     """
