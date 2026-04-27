@@ -1,42 +1,43 @@
-# DETR: End-to-End Object Detection with Transformers
+# DETR: Minimal Architecture Implementation
 
-This repository contains a clean, modular implementation of **DETR (DEtection TRansformer)** from scratch using PyTorch.
+![DETR Architecture](assets/image.png)
+
+A clean, from-scratch implementation of the DETR (DEtection TRansformer) architecture in PyTorch. 
 
 ## Project Structure
 
-- `models/`: Model architecture
-  - `backbone/`: CNN backbone (ResNet) to extract feature maps.
-  - `transformer/`: Multi-head attention, Encoder, and Decoder modules.
-  - `positional_encoding/`: Sine/Learned positional encodings.
-- `matcher/`: Hungarian Matcher for bipartite matching loss.
-- `engine/`: Training and evaluation loops.
-- `losses/`: Set-based loss functions (Hungarian loss).
+- `models/`: High-level DETR model integration.
+  - `backbone/`: ResNet50 feature extractor and channel projection.
+  - `transformer/`: Custom Multi-Head Attention, Encoder stack, and Decoder stack.
+  - `positional_encoding/`: 2D Sine-Cosine positional encodings.
+  - `heads/`: Classification and Bounding Box (MLP) prediction heads.
+- `utils/`: Helper functions for box operations and coordinate conversions.
 
-## Getting Started
+## Installation
 
-1. **Install Dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+pip install torch torchvision
+```
 
-2. **Training:**
-   ```bash
-   python train.py --config configs/coco_config.yaml
-   ```
+## Usage
 
-3. **Inference:**
-   ```bash
-   python inference.py --image path/to/image.jpg
-   ```
+```python
+from models.detr import DETR
+import torch
 
-## Roadmap
+model = DETR(num_classes=20, embed_dim=256, num_layers=6)
+image = torch.randn(1, 3, 224, 224)
 
-- [x] Basic Project Structure
-- [x] CNN Backbone (ResNet-50)
-- [ ] Transformer Encoder/Decoder
-- [ ] Hungarian Matcher
-- [ ] Training Pipeline
-- [ ] COCO Evaluation
+output = model(image)
+print(output["pred_logits"].shape) 
+print(output["pred_boxes"].shape)  
+```
+
+## Running the Architecture Test
+
+```bash
+python3 -m models.detr
+```
 
 ## Acknowledgments
 

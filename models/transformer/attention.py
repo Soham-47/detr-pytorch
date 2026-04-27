@@ -7,19 +7,22 @@ class MultiHeadAttention(nn.Module):
     This module is responsible for the 'Self-Attention' mechanism. 
     In DETR, this allows object queries to 'talk' to each other and to the image features.
     """
-    def __init__(self, d_model, num_heads):
+    def __init__(self, embed_dim, num_heads):
+        if embed_dim<=0 or num_heads<=0:
+            raise ValueError("embed_dim and num_heads must be positive")
+        if embed_dim % num_heads!=0:
+            raise ValueError("embed_dim must be divisible by num_heads")
         super().__init__()
-        assert d_model % num_heads==0
 
-        self.query = nn.Linear(d_model ,d_model )
-        self.key = nn.Linear(d_model ,d_model)
-        self.values = nn.Linear(d_model , d_model)
+        self.query = nn.Linear(embed_dim ,embed_dim )
+        self.key = nn.Linear(embed_dim ,embed_dim)
+        self.values = nn.Linear(embed_dim , embed_dim)
 
         self.num_heads = num_heads
-        self.d_model = d_model
-        self.head_dim = d_model // num_heads
+        self.embed_dim = embed_dim
+        self.head_dim = embed_dim // num_heads
 
-        self.output = nn.Linear(d_model , d_model)
+        self.output = nn.Linear(embed_dim , embed_dim)
 
     def forward(self, q, k, v, mask=None):
         batch_size = q.size(0)
@@ -45,6 +48,6 @@ class MultiHeadAttention(nn.Module):
         weighted_sum = torch.matmul(weights, V)
         
         x = weighted_sum.transpose(1, 2)
-        x = x.contiguous().view(batch_size, -1, self.d_model)
+        x = x.contiguous().view(batch_size, -1, self.embed_dim)
         return self.output(x)
 
